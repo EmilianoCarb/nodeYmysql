@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-module.exports = {
+const userMiddleware = {
   validateRegister: (req, res, next) => {
     // username min length 3
     if (!req.body.username || req.body.username.length < 3) {
@@ -44,3 +44,5 @@ module.exports = {
     }
   },
 };
+
+export default userMiddleware;

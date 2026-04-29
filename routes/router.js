@@ -2,11 +2,13 @@ import express from 'express';
 const router = express.Router();
 
 import bcrypt from 'bcryptjs';
-import uuid  from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 
-const db = require('../lib/db.js');
-const userMiddleware = require('../middleware/users.js');
+import db from '../lib/db.js';
+import userMiddleware from '../middleware/users.js';
+
+console.log('Contenido del middleware:', userMiddleware);
 
 router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
   db.query(
@@ -28,7 +30,7 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
           } else {
             db.query(
               'INSERT INTO users (id, username, password, registered) VALUES (?, ?, ?, now());',
-              [uuid.v4(), req.body.username, hash],
+              [uuidv4(), req.body.username, hash],
               (err, result) => {
                 if (err) {
                   return res.status(400).send({
@@ -53,4 +55,4 @@ router.get('/secret-route', (req, res, next) => {
   res.send('This is the secret content. Only logged in users can see that!');
 });
 
-module.exports = router;
+export default router;
